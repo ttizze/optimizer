@@ -1,7 +1,4 @@
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
 from fastapi import FastAPI, Header, Request, Response
 from fastapi.responses import FileResponse
 from linebot import LineBotApi, WebhookHandler

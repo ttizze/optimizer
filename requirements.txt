@@ -9,4 +9,3 @@ tiktoken
 pytz
 requests
 tenacity
-dotenv
