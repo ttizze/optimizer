@@ -21,9 +21,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-supabaseurl = os.getenv("SUPABASE_URL")
-supabasekey = os.getenv("SUPABASE_KEY")
-supabase: Client = create_client(supabaseurl, supabasekey)
 # LINE Botに関するインスタンス作成
 line_bot_api = LineBotApi(os.environ["LINE_CHANNEL_ACCESS_TOKEN"])
 handler = WebhookHandler(os.environ["LINE_CHANNEL_SECRET"])
