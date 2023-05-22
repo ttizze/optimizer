@@ -15,15 +15,9 @@ from linebot.models import (
     URIAction,
 )
 
-from ..services.ai.pre_processing.pre_processing import PreProcessing
 from ..services.db_services.db_access import DBLayer
-from ..services.ai.post_processing.post_processing import PostProcessing
 from ..services.ai.llm.llm import LLM
-from ..services.ai.llm.gpt4_llm import GPT4LLM
 from ..services.ai.ai_service import AIService
-
-from ..utils.user_utils import UserUtils
-from ..utils.message_checker import MessageChecker
 
 
 def handle_user_message(
