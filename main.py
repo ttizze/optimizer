@@ -5,7 +5,6 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent
 from starlette.exceptions import HTTPException
-from supabase import create_client, Client
 from starlette.middleware.cors import CORSMiddleware
 from app.routers import linebot
 from pydantic import BaseModel
@@ -40,11 +39,6 @@ def root():
 )
 async def callback(request: Request, x_line_signature=Header(None)):
     body = await request.body()
-    try:
-        handler.handle(body.decode("utf-8"), x_line_signature)
-
-    except InvalidSignatureError:
-        raise HTTPException(status_code=400, detail="InvalidSignatureError")
 
     return "OK"
 
