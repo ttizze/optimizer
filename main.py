@@ -50,18 +50,18 @@ async def callback(request: Request, x_line_signature=Header(None)):
     return "OK"
 
 
-@app.get(
-    "/auth_my_info_api",
-    summary="自己情報提供API認証のモック",
-    description="とりあえずクリックしたらLINE返信",
-)
-def auth_my_info_api(request: Request, x_line_signature=Header(None)):
-    body = request.body()
-    try:
-        handler.handle(body.decode("utf-8"), x_line_signature)
-    except InvalidSignatureError:
-        raise HTTPException(status_code=400, detail="InvalidSignatureError")
-    return "OK"
+# @app.get(
+#     "/auth_my_info_api",
+#     summary="自己情報提供API認証のモック",
+#     description="とりあえずクリックしたらLINE返信",
+# )
+# def auth_my_info_api(request: Request, x_line_signature=Header(None)):
+#     body = request.body()
+#     try:
+#         handler.handle(body.decode("utf-8"), x_line_signature)
+#     except InvalidSignatureError:
+#         raise HTTPException(status_code=400, detail="InvalidSignatureError")
+#     return "OK"
 
 
 
@@ -84,15 +84,13 @@ def handle_message(event):
         if user_message == "同意する":
             DBLayer().create_user(line_user_id)
             line_bot_api.reply_message(event.reply_token, linebot.first_message())
-            line_bot_api.reply_message(event.reply_token, linebot.first_message())
+            line_bot_api.reply_message(event.reply_token, linebot.second_message())
         else:
             line_bot_api.reply_message(event.reply_token, linebot.agreement_message())
     else:
         line_bot_obj = linebot.handle_user_message(user_id, user_message)
         #返信
         line_bot_api.reply_message(event.reply_token, line_bot_obj)
-        if hasattr(line_bot_obj, "text"):
-            PostProcessing(line_user_id).save_to_memory(line_bot_obj.text, user_message)
 
 
 
