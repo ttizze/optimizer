@@ -92,7 +92,7 @@ def handle_message(event):
             print(result.text)
             line_bot_api.reply_message(event.reply_token, linebot.after_search_result())
         else:
-            linebot.agreement_message()
+            line_bot_api.reply_message(event.reply_token, linebot.agreement_message())
     else:
         line_bot_obj = linebot.update_profile(user_id, user_message)
         DBLayer().update_profile(user_id, line_bot_obj.text)
