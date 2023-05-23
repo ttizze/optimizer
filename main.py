@@ -81,14 +81,13 @@ def handle_message(event):
             DBLayer().create_user(line_user_id)
             user_id = DBLayer().get_user_id_from_line_id(line_user_id)
             personal_information = linebot.get_personal_information_from_api()
-
             messages = []
             first_message = linebot.first_message(personal_information)
             messages.append(first_message)
             profile = linebot.second_message(personal_information)
             messages.append(profile)
             DBLayer().update_profile(user_id, profile.text)
-            result = linebot.search_support(profile)
+            result = linebot.search_support(profile.text)
             after_search_result = linebot.after_search_result()
             messages.append(after_search_result)
             line_bot_api.reply_message(event.reply_token, messages)
