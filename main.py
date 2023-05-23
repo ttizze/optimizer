@@ -100,6 +100,7 @@ def handle_message(event):
         DBLayer().update_profile(user_id, line_bot_obj.text)
         result = linebot.search_support(line_bot_obj.text)
         print(result)
+        messages.append(str(result))
         after_search_result = linebot.after_search_result()
         messages.append(after_search_result)
         line_bot_api.reply_message(event.reply_token, messages)
