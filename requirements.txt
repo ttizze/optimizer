@@ -6,4 +6,4 @@ openai==0.27.4
 pytz
 python-dotenv
 guidance
-psycopg2-binary
+supabase
