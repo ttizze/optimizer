@@ -42,11 +42,7 @@ def root():
 )
 async def callback(request: Request, x_line_signature=Header(None)):
     body = await request.body()
-    try:
-        handler.handle(body.decode("utf-8"), x_line_signature)
-
-    except InvalidSignatureError:
-        raise HTTPException(status_code=400, detail="InvalidSignatureError")
+    handler.handle(body.decode("utf-8"), x_line_signature)
     return "OK"
 
 
