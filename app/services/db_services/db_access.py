@@ -82,8 +82,12 @@ class DBLayer(BaseModel):
         embedding_model = OpenAIEmbeddings()
         query_embedding = embedding_model.embed_query(profile)
         result = supabase.rpc("match_documents", {"query_embedding": query_embedding,"match_count":5}).execute()
+        supports =""
         if result.data:
-            return result.data
+            #リストを連結して一つの文字列にする
+            for i in range(len(result.data)):
+                supports += result.data[i]["title"] + "\n" + result.data[i]["content"] + "\n"
+            return
         else:
             return None
 
