@@ -82,7 +82,10 @@ class DBLayer(BaseModel):
         embedding_model = OpenAIEmbeddings()
         query_embedding = embedding_model.embed_query(profile)
         result = supabase.rpc("match_documents", {"query_embedding": query_embedding,"match_count":5}).execute()
-        return result.data
+        if result.data:
+            return result.data
+        else:
+            return None
 
     def get_profile(self,user_id:int) -> str:
         profile = (
