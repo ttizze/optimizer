@@ -16,25 +16,22 @@ from linebot.models import (
 )
 
 from ..services.db_services.db_access import DBLayer
-from ..services.ai.llm.llm import LLM
 from ..services.ai.ai_service import AIService
 
 
 def handle_user_message(
     user_id: int, message: str
 ) -> Union[TextSendMessage, FlexSendMessage]:
-    return TextSendMessage(text="メッセージが長すぎます。200文字以内にしてください。")
-
-    response = "エラーが発生しました。時間をおいてもう一度送信してみてください。"
+    response = AIService().get_response(message)
     return TextSendMessage(text=response)
 
-def agreement_message() -> Union[TextSendMessage, FlexSendMessage]:
+def agreement_message() -> TextSendMessage:
     response = "同意いただけない場合、本サービスはご利用いただけません。"
     return TextSendMessage(text=response)
 
-def first_message() -> Union[TextSendMessage, FlexSendMessage]:
-    response = """
-    下記があなたの個人情報です。
+
+def get_personal_information_from_api() -> str:
+    return """
     特定個人情報等
         地方税法その他の地方税に関する法律に基づく条例の規定により算定した税額若しくはその算定の基礎となる事項に関する情報
 
@@ -160,7 +157,34 @@ def first_message() -> Union[TextSendMessage, FlexSendMessage]:
 
         行政機関等
         行政機関等,東京都台東区
+    """
 
+def first_message(personal_information:str) -> TextSendMessage:
+    response = f"""
+    現在、あなたの個人情報を基に、OPTIMIZERがあなたの状況を推測しています。
+
+    下記があなたの個人情報です。
+
+    {personal_information}
 
         """
+    return TextSendMessage(text=response)
+
+def second_message(personal_information:str) ->TextSendMessage:
+    profile = AIService().profile_from_personal_information(personal_information)
+    return TextSendMessage(text=profile)
+
+def search_support(profile:str) -> TextSendMessage:
+    result = DBLayer().search_support(profile)
+    return TextSendMessage(text=result)
+
+def after_search_result() -> TextSendMessage:
+    response = """
+    あなたの現在の状況に対して、以上の支援が受けられそうです。他に何かお困りのことはありますか？
+    """
+    return TextSendMessage(text=response)
+
+def update_profile(user_id:int,message:str) -> TextSendMessage:
+    profile = DBLayer().get_profile(user_id)
+    response = AIService().update_profile(profile,message)
     return TextSendMessage(text=response)

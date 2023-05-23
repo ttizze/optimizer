@@ -83,14 +83,27 @@ def handle_message(event):
     if user_id is None:
         if user_message == "同意する":
             DBLayer().create_user(line_user_id)
-            line_bot_api.reply_message(event.reply_token, linebot.first_message())
-            line_bot_api.reply_message(event.reply_token, linebot.second_message())
+            user_id = DBLayer().get_user_id_from_line_id(line_user_id)
+            personal_information = linebot.get_personal_information_from_api()
+            first_message = linebot.first_message(personal_information)
+            line_bot_api.reply_message(event.reply_token, first_message)
+            profile = linebot.second_message(personal_information)
+            line_bot_api.reply_message(event.reply_token, profile)
+            DBLayer().update_profile(user_id, profile.text)
+            print(profile)
+            result = linebot.search_support(profile)
+            line_bot_api.reply_message(event.reply_token, result)
+            print(result.text)
+            line_bot_api.reply_message(event.reply_token, linebot.after_search_result())
         else:
-            line_bot_api.reply_message(event.reply_token, linebot.agreement_message())
+            linebot.agreement_message()
     else:
-        line_bot_obj = linebot.handle_user_message(user_id, user_message)
-        #返信
+        line_bot_obj = linebot.update_profile(user_id, user_message)
+        DBLayer().update_profile(user_id, line_bot_obj.text)
         line_bot_api.reply_message(event.reply_token, line_bot_obj)
-
+        print(line_bot_obj.text)
+        result = linebot.search_support(line_bot_obj.text)
+        line_bot_api.reply_message(event.reply_token, result)
+        line_bot_api.reply_message(event.reply_token, linebot.after_search_result())
 
 
