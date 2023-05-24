@@ -160,8 +160,7 @@ def get_personal_information_from_api() -> str:
     """
 
 def first_message(personal_information:str) -> TextSendMessage:
-    response = f"""
-    現在、あなたの個人情報を基に、OPTIMIZERがあなたの状況を推測しています。
+    response = f"""現在、あなたの個人情報を基に、OPTIMIZERがあなたの状況を推測しています。
 
     下記があなたの個人情報です。
 
@@ -179,8 +178,7 @@ def search_support(profile:str) -> TextSendMessage:
     return TextSendMessage(text=result)
 
 def after_search_result() -> TextSendMessage:
-    response = """
-    あなたの現在の状況に対して、以上の支援が受けられそうです。他に何かお困りのことはありますか？
+    response = """あなたの現在の状況に対して、以上の支援が受けられそうです。他に何かお困りのことはありますか？
     """
     return TextSendMessage(text=response)
 

@@ -34,11 +34,14 @@ class AIService(BaseModel):
     def update_profile(self,profile:str,message:str) -> str:
         llm = guidance.llms.OpenAI("gpt-3.5-turbo")
         update_profile = guidance("""
+            {{#system~}}
+            あなたはソーシャルワーカーです。ユーザーの個人情報と、ユーザーの現在困っていることを読み、現在置かれている状況を推察し、支援が受けられそうな特徴をリスト形式で出力してください。
+            {{~/system}}
             {{#user~}}
-            下記に私の個人情報を貼ります。
+            下記に個人情報を貼ります。
             {{profile}}
 
-            下記が現在私が困っていることです。
+            下記が現在困っていることです。
             {{message}}
 
             上記の個人情報に、現在私が困っていることを要約し、書き加えて出力してください。
