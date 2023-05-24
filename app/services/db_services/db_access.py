@@ -86,7 +86,7 @@ class DBLayer(BaseModel):
         if result.data:
             #リストを連結して一つの文字列にする
             for i in range(len(result.data)):
-                supports += "["+ result.data[i]["title"] + "]\n" + result.data[i]["content"] + "\n\n"
+                supports += "[ "+ result.data[i]["title"] + " ]\n" + result.data[i]["content"] + "\n\n"
             return supports
         else:
             return None
